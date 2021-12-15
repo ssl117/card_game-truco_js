@@ -78,10 +78,55 @@ function valueCards(card){
 	}
 }
 
+function winsGame(round){
+	switch(round){
+		case 1:
+			return 'Play';
+			break;
+
+		case 2:
+			if(roundsPlayerOne == 2 && roundsPlayerTwo == 0){
+				return 'Player One Wins!';
+				break;
+			} else if(roundsPlayerTwo == 2 && roundsPlayerOne == 0){
+				return 'Player Two Wins!';
+				break;
+			} else if(roundsPlayerOne == 4){
+				return 'Player One Wins!';
+				break;
+			} else if(roundsPlayerTwo == 4){
+				return 'Player Two Wins!';
+				break;
+			} else {
+				return 'Play';
+				break;
+		}
+
+		case 3:
+			if(roundsPlayerOne > roundsPlayerTwo){
+				return 'Player One Wins!';
+			} else if(roundsPlayerOne < roundsPlayerTwo){
+				return 'Player Two Wins!';
+			} else {
+				if(first_round == 'P1'){
+					return 'Player One Wins! (Won First Round)';
+				} else if(first_round == 'P2'){
+					return 'Player Two Wins! (Won First Round)';
+				} else {
+					return 'WHAAAAAAAAAAAAAAAAT';
+				}
+		}
+
+		default:
+			return 'Play';
+			break;
+	}
+}
+
 function playHand(hand1, hand2){
+	
 	let rounds = 3;
-	let roundsPlayerOne = 0;
-	let roundsPlayerTwo = 0;
+
 	console.log('Player 1 Hand:\n')
 	console.log(hand1);
 	console.log('\n')
@@ -90,6 +135,15 @@ function playHand(hand1, hand2){
 	console.log('\n')
 
 	for(i = 0; i < rounds; i++){
+
+		let whoWins = winsGame(round_count);
+
+		if(whoWins != 'Play') {
+			return whoWins;
+		}
+
+		round_count += 1;
+
 		console.log('Round ' + (i+1) + ': \n')
 		console.log(hand1[0]);
 		console.log(hand2[0]);
@@ -102,20 +156,37 @@ function playHand(hand1, hand2){
 		} else if (PLayerOneCard < PLayerTwoCard){
 			roundsPlayerTwo += 1;
 		} else {
-			roundsPlayerOne += 1;
-			roundsPlayerTwo += 1;
+			roundsPlayerOne += 3;
+			roundsPlayerTwo += 3;
+		}
+
+		if(round_count == 1){
+			if(roundsPlayerOne > roundsPlayerTwo){
+				first_round = 'P1';
+			} else if(roundsPlayerOne < roundsPlayerTwo){
+				first_round = 'P2';
+			} else {
+				first_round = 'Tie';
+			}
+		}
+
+		if(round_count == 3){
+
+			whoWins = winsGame(round_count);
+
+			if(whoWins != 'Play') {
+				return whoWins;
+			}
+
 		}
 	}
 
-	if(roundsPlayerOne > roundsPlayerTwo){
-		return 'Player One Wins!';
-	} else if(roundsPlayerOne < roundsPlayerTwo){
-		return 'Player Two Wins!';
-	} else {
-		return 'It is a Tie?';
-	}
-
 }
+
+let roundsPlayerOne = 0;
+let roundsPlayerTwo = 0;
+let round_count = 0;
+let first_round = '';
 
 let mazo = shuffleDeck(createDeck());
 
